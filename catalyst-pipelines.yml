@@ -1,0 +1,23 @@
+version: 1
+jobs:
+  deploy:
+    steps:
+    - cd photo-store-app
+    - npm install
+    - npm run build
+    - cd ..
+    - cd server
+    - npm install
+    - cd ..
+    - cd scripts
+    - npm install
+    - cd ..
+    - node ./scripts/filesHelper.js -c ./server/ ./build/server/
+    - node ./scripts/filesHelper.js -c ./photo-store-app/build/ ./build/photo-store-app/
+    - npm install -g zcatalyst-cli@beta
+    - catalyst deploy
+        
+stages:
+  - name: build
+    jobs:
+        - deploy
